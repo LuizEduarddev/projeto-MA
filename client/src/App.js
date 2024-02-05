@@ -1,10 +1,12 @@
-import React from 'react';
-import './global.css';
-import Rotas from './routes';
+import React from "react";
+import Routes from "./routes";
 
-export default function App() {
+function App() {
   return (
-    <Rotas/>
+    <div>
+      <Routes/>
+    </div>
   );
 }
 
+export default App;
