@@ -45,7 +45,7 @@ public class ProdutoService
 	}
 	
 	//PostMapping
-	public Produto postProduto(Produto produto)
+	public Produto addProduto(Produto produto)
 	{
 		if (produto == null)
 		{

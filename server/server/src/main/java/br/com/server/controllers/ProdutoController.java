@@ -38,9 +38,9 @@ public class ProdutoController
 		return service.getProdutoByName(nomeProduto);
 	}
 	
-	@PostMapping("/post")
-	public Produto postProduto(@RequestBody Produto produto)
+	@PostMapping("/add")
+	public Produto addProduto(@RequestBody Produto produto)
 	{
-		return service.postProduto(produto);
+		return service.addProduto(produto);
 	}
 }

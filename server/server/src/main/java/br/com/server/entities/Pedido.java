@@ -7,23 +7,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity(name = "pedido")
 @Table(name = "pedido")
+
 public class Pedido {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long idPedido;
 
-	@Column(name = "mesa_pedido", nullable = false)
+	
+	@ManyToOne
+	@JoinColumn(name = "id_mesa",
+				unique = false,
+				nullable = false)
 	private Mesa mesaPedido;
-
+	 
+	
 	@Column(name = "data_pedido")
 	private Date dataPedido;
 
-	public Pedido(Mesa mesaPedido, Date dataPedido) {
-		this.mesaPedido = mesaPedido;
+	public Pedido(Date dataPedido) {
 		this.dataPedido = dataPedido;
 	}
 
@@ -35,14 +43,6 @@ public class Pedido {
 		this.idPedido = idPedido;
 	}
 
-	public Mesa getMesaPedido() {
-		return mesaPedido;
-	}
-
-	public void setMesaPedido(Mesa mesaPedido) {
-		this.mesaPedido = mesaPedido;
-	}
-
 	public Date getDataPedido() {
 		return dataPedido;
 	}
@@ -52,3 +52,4 @@ public class Pedido {
 	}
 
 }
+
