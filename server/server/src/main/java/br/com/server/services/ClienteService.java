@@ -54,21 +54,32 @@ public class ClienteService {
 	//Post Mapping
 	public ClienteLoginDTO checkCliente(ClienteLoginDTO dto)
 	{
-		String cpf = dto.getCpfDTO();	
-		Cliente cliente0 = repository.findByCpfCliente(cpf);
-		
-		if (cliente0 == null)
+		if (dto == null)
 		{
-			throw new ClienteException("Cadastro com cpf '" + cpf + "' nao encontado.");
-		}
-		
-		if (cliente0.getSenhaCliente().equals(dto.getSenhaDTO()))
-		{
-			return dto;
+			throw new ClienteException("credenciais nao podem ser nulas.");
 		}
 		else
 		{
-			throw new ClienteException("CPF ou SENHA incorretos, por favor, tente novamente.");
+			String cpf = dto.getCpfDTO();	
+			Cliente cliente0 = repository.findByCpfCliente(cpf);
+			ClienteLoginDTO clienteReturned = new ClienteLoginDTO(cliente0);
+			
+			if (cpf == null)
+			{
+				throw new ClienteException("cpf do cliente '" + cliente0.getNomeCliente() + "' é nulo");
+			}
+			else if (cliente0 == null)
+			{
+				throw new ClienteException("Cadastro com cpf '" + cpf + "' nao encontado.");
+			}
+			else if (cliente0.getSenhaCliente().equals(dto.getSenhaDTO()))
+			{
+				return clienteReturned;
+			}
+			else
+			{
+				throw new ClienteException("CPF ou SENHA incorretos, por favor, tente novamente.");
+			}
 		}
 	}
 	

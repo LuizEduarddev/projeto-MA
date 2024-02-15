@@ -1,5 +1,7 @@
 package br.com.server.entities.dto.clientedto;
 
+import br.com.server.entities.Cliente;
+
 public class ClienteLoginDTO {
 
 	private String cpfDTO;
@@ -10,6 +12,14 @@ public class ClienteLoginDTO {
 		this.cpfDTO = cpfDTO;
 		this.senhaDTO = senhaDTO;
 		this.nomeClienteDTO = nomeClienteDTO;
+	}
+	
+	public ClienteLoginDTO(Cliente cliente)
+	{
+		this.cpfDTO = cliente.getCpfCliente();
+		this.senhaDTO = cliente.getSenhaCliente();
+		this.nomeClienteDTO = cliente.getNomeCliente();
+
 	}
 
 	public String getNomeClienteDTO() {

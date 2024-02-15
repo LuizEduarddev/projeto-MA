@@ -18,14 +18,38 @@ public class Produto {
 	private String nomeProduto;
 
 	@Column(name = "preco_produto", nullable = false)
-	private Double precoProduto; 
-	
+	private Double precoProduto;
+
+	@Column(name = "descricao_produto", nullable = false, unique = false)
+	private String descricaoProduto;
+
+	@Column(name = "promo_produto", nullable = false, unique = false)
+	private int promoProduto;
+
 	public Produto() {
 	}
 
-	public Produto(String nomeProduto, Double precoProduto) {
+	public Produto(String nomeProduto, Double precoProduto, String descricaoProduto, int promoProduto) {
 		this.nomeProduto = nomeProduto;
 		this.precoProduto = precoProduto;
+		this.descricaoProduto = descricaoProduto;
+		this.promoProduto = promoProduto;
+	}
+
+	public String getDescricaoProduto() {
+		return descricaoProduto;
+	}
+
+	public void setDescricaoProduto(String descricaoProduto) {
+		this.descricaoProduto = descricaoProduto;
+	}
+
+	public int getPromoProduto() {
+		return promoProduto;
+	}
+
+	public void setPromoProduto(int promoProduto) {
+		this.promoProduto = promoProduto;
 	}
 
 	public Long getIdProduto() {

@@ -51,6 +51,10 @@ public class ProdutoService
 		{
 			throw new ProdutoException("product must not be null to post.");
 		}
+		else if (produto.getPromoProduto() != 1 && produto.getPromoProduto() != 0)
+		{
+			throw new ProdutoException("a promocao do produto nao pode ser diferente de 0 ou 1.");
+		}
 		else
 		{
 			repository.saveAndFlush(produto);

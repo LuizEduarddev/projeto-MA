@@ -24,16 +24,16 @@ export default function Login()
                 senhaDTO
             }
     
-            try
-            {
-                const response = await api.post('http://localhost:8080/api/cliente/check-in', credentials);
+            api.post('http://localhost:8080/api/cliente/check-in', credentials)
+            .then(response => {
                 localStorage.setItem('username', response.data.nomeClienteDTO);
-                navigate('youtube.com');
-            }
-            catch(error)
-            {
-                alert(error.response.data.message)
-            }
+                alert(response.data.nomeClienteDTO);
+                alert(response.data)
+                navigate('/promo');
+            })
+            .catch(error => {
+                alert(error.response.data.message);
+            })
         }
     }
 
