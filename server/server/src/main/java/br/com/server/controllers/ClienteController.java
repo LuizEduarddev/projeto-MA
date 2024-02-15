@@ -35,8 +35,8 @@ public class ClienteController {
 		return service.checkCliente(cliente);
 	}
 	
-	@PostMapping("/get-by-id")
-	public Cliente getById(@RequestBody Long id)
+	@PostMapping("/get-by-id/{id}")
+	public Cliente getById(@PathVariable Long id)
 	{
 		return service.getClienteById(id);
 	}

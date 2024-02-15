@@ -27,8 +27,7 @@ export default function Login()
             api.post('http://localhost:8080/api/cliente/check-in', credentials)
             .then(response => {
                 localStorage.setItem('username', response.data.nomeClienteDTO);
-                alert(response.data.nomeClienteDTO);
-                alert(response.data)
+                localStorage.setItem('token', response.data.idClienteDTO);
                 navigate('/promo');
             })
             .catch(error => {

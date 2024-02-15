@@ -35,7 +35,7 @@ public class Cliente {
 	@Column(name = "birth_day", unique = false, nullable = true)
 	private Date aniversarioCliente;
 
-	@Column(name = "senha_cliente", unique = false, nullable = true)
+	@Column(name = "senha_cliente", unique = false, nullable = false)
 	private String senhaCliente;
 
 	public Cliente() {
