@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.server.entities.Carrinho;
+import br.com.server.entities.Cliente;
 import br.com.server.exceptions.CarrinhoException;
 import br.com.server.repositorys.CarrinhoRepository;
+import br.com.server.repositorys.ClienteRepository;
 
 @Service
 public class CarrinhoService {
 
 	@Autowired
 	private CarrinhoRepository repository;
+	
+	@Autowired
+	private ClienteRepository repositoryCliente;
 	
 	//Get mapping
 	public List<Carrinho> getAllCarrinho()
@@ -41,8 +46,11 @@ public class CarrinhoService {
 		}
 		else
 		{
+			Cliente cliente0 = repositoryCliente.findById(carrinho.getIdClienteCarrinho())
+					.orElseThrow(() -> new CarrinhoException("É necessário um cliente válido para associar ao carrinho."));			
 			repository.saveAndFlush(carrinho);
 			return carrinho;
+			
 		}
 	}
 	
@@ -52,7 +60,10 @@ public class CarrinhoService {
 		Carrinho carrinho0 = repository.findById(id)
 				.orElseThrow(() -> 
 				new CarrinhoException("Carrinho com id '" + id + "' nao encontrado."));
-				
+		
+		Cliente cliente0 = repositoryCliente.findById(novoCarrinho.getIdClienteCarrinho())
+				.orElseThrow(() -> new CarrinhoException("É necessário um cliente válido para associar ao carrinho."));			
+		
 		try {
 	        Class<?> carrinhoClass = Carrinho.class;
 	        Field[] fields = carrinhoClass.getDeclaredFields();

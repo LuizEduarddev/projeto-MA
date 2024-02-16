@@ -4,6 +4,7 @@ import Login from "./pages/ClientSide/LoginPage/Login";
 import Promo from "./pages/ClientSide/PromoPage/Promo";
 import Home from "./pages/ClientSide/HomePage/Home";
 import Profile from "./pages/ClientSide/ProfilePage/Profile";
+import Carrinho from "./pages/ClientSide/CarrinhoPage/Carrinho";
 
 export default function Rotas(){
     return(
@@ -13,6 +14,7 @@ export default function Rotas(){
                 <Route path="/promo" Component={Promo}/>
                 <Route path="/home" Component={Home}/>
                 <Route path="/cliente/perfil" Component={Profile}/>
+                <Route path="/cliente/carrinho" Component={Carrinho}/>
             </Routes>
         </Router>
     );
