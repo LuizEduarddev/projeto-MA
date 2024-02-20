@@ -10,16 +10,12 @@ import br.com.server.entities.Cliente;
 import br.com.server.entities.dto.clientedto.ClienteLoginDTO;
 import br.com.server.exceptions.ClienteException;
 import br.com.server.repositorys.ClienteRepository;
-import jakarta.persistence.EntityManager;
 
 @Service
 public class ClienteService {
 
 	@Autowired
 	private ClienteRepository repository;
-	
-	@Autowired
-    private EntityManager manager;
 	
 	//Get Mapping
 	public List<Cliente> getAllCliente()

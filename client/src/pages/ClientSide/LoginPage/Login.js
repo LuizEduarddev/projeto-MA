@@ -23,12 +23,19 @@ export default function Login()
                 cpfDTO,
                 senhaDTO
             }
-    
+            
             api.post('http://localhost:8080/api/cliente/check-in', credentials)
             .then(response => {
                 localStorage.setItem('username', response.data.nomeClienteDTO);
                 localStorage.setItem('token', response.data.idClienteDTO);
-                navigate('/promo');
+                const mesaToken = localStorage.getItem('mesaIdToken');
+                if (mesaToken === null)
+                {
+                    navigate('/promo');
+                }
+                else{
+                    navigate('/mesa/' + mesaToken);
+                }
             })
             .catch(error => {
                 alert(error.response.data.message);

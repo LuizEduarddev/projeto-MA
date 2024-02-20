@@ -6,8 +6,30 @@ export default function Mesa() {
     const { id } = useParams();
     const navigate = useNavigate ();
     
+    const [integrantes, setIntegrantes] = useState([]);
+
     const isValidId = parseInt(id) >= 1 && parseInt(id) <= 9;
     const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        api.post('http://localhost:8080/api/mesa/get-by-id/' + id)
+        .then(response => {
+            setIntegrantes(response.data.clientesMesa);
+        })
+        .catch(error => {
+            alert(error);
+        });
+    }, []);
+
+    useEffect(() => {
+        api.post('http://localhost:8080/api/mesa/get-by-id/' + id)
+        .then(response => {
+            setIntegrantes(response.data.clientesMesa);
+        })
+        .catch(error => {
+            alert(error);
+        });
+    }, [integrantes]);
 
     useEffect(() => {
         if (!isValidId)
@@ -36,8 +58,14 @@ export default function Mesa() {
 
     return (
         <div>
-            <h2>Mesa {id}</h2>
-            <p>id no momento {token}</p>
+            <h1>Integrantes da mesa.</h1>
+            <ul>
+                {integrantes.map(integrante => (
+                    <li key={integrante.idClienteDTO}>
+                        <h1>{integrante.nomeClienteDTO}</h1>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
