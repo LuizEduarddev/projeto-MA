@@ -26,14 +26,27 @@ public class Produto {
 	@Column(name = "promo_produto", nullable = false, unique = false)
 	private int promoProduto;
 
+	@Column(name = "classe_produto", nullable = false, unique = false)
+	private String classeProduto;
+
 	public Produto() {
 	}
 
-	public Produto(String nomeProduto, Double precoProduto, String descricaoProduto, int promoProduto) {
+	public Produto(String nomeProduto, Double precoProduto, String descricaoProduto, int promoProduto,
+			String classeProduto) {
 		this.nomeProduto = nomeProduto;
 		this.precoProduto = precoProduto;
 		this.descricaoProduto = descricaoProduto;
 		this.promoProduto = promoProduto;
+		this.classeProduto = classeProduto;
+	}
+
+	public String getClasseProduto() {
+		return classeProduto;
+	}
+
+	public void setClasseProduto(String classeProduto) {
+		this.classeProduto = classeProduto;
 	}
 
 	public String getDescricaoProduto() {

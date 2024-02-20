@@ -61,4 +61,15 @@ public class ProdutoService
 			return produto;
 		}
 	}
+	
+	//Delete
+	public Produto deleteProduto(Long id)
+	{
+		Produto produto = repository.findById(id)
+				.orElseThrow(() -> new ProdutoException("Produto com id '" + "' nao existe"));
+		Produto produtoSave = produto;
+		
+		repository.deleteById(id);
+		return produtoSave;
+	}
 }
