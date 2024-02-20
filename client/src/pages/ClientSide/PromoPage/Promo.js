@@ -20,6 +20,23 @@ export default function Promo()
           });
       }, []);
 
+    useEffect(() => {
+        async function getProducts()
+        {
+            api.get('http://localhost:8080/api/produto/get-all')
+            .then(response => {
+            setProdutos(response.data);
+            const newPromo = response.data
+                            .filter(produto => produto.promoProduto === 1);
+            setPromo(newPromo);
+            })
+            .catch(error => {
+            alert(error);
+            });
+        }
+        getProducts();
+    }, [produtos]);
+
 
     return(
         <div>

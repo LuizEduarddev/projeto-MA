@@ -55,15 +55,30 @@ export default function Home()
         }
     }
     
-      useEffect(() => {
+    useEffect(() => {
         api.get('http://localhost:8080/api/produto/get-all')
-          .then(response => {
+            .then(response => {
             setProdutos(response.data);
-          })
-          .catch(error => {
+            })
+            .catch(error => {
             alert(error);
-          });
-      }, []);
+            });
+    }, []);
+
+    useEffect(() => {
+        async function getProducts()
+        {
+            api.get('http://localhost:8080/api/produto/get-all')
+            .then(response => {
+            setProdutos(response.data);
+            })
+            .catch(error => {
+            alert(error);
+            });
+        }
+
+        getProducts();
+    }, [produtos]);
 
 
     return(

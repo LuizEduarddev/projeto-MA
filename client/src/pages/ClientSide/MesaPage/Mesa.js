@@ -6,6 +6,8 @@ export default function Mesa() {
     const { id } = useParams();
     const navigate = useNavigate ();
     
+    const atualUser = localStorage.getItem('username');
+
     const [integrantes, setIntegrantes] = useState([]);
 
     const isValidId = parseInt(id) >= 1 && parseInt(id) <= 9;
@@ -22,13 +24,18 @@ export default function Mesa() {
     }, []);
 
     useEffect(() => {
-        api.post('http://localhost:8080/api/mesa/get-by-id/' + id)
-        .then(response => {
-            setIntegrantes(response.data.clientesMesa);
-        })
-        .catch(error => {
-            alert(error);
-        });
+        async function getIntegrantes() {
+            api.post('http://localhost:8080/api/mesa/get-by-id/' + id)
+            .then(response => {
+                setIntegrantes(response.data.clientesMesa);
+            })
+            .catch(error => {
+                alert(error);
+            });
+        }
+        
+        getIntegrantes();
+
     }, [integrantes]);
 
     useEffect(() => {
@@ -62,7 +69,13 @@ export default function Mesa() {
             <ul>
                 {integrantes.map(integrante => (
                     <li key={integrante.idClienteDTO}>
-                        <h1>{integrante.nomeClienteDTO}</h1>
+                        {integrante.nomeClienteDTO && integrante.nomeClienteDTO === atualUser ? (
+                            <>
+                                <h1>{integrante.nomeClienteDTO} (Você)</h1>
+                            </>
+                        ) : (
+                            <h1>{integrante.nomeClienteDTO}</h1>
+                        )}
                     </li>
                 ))}
             </ul>

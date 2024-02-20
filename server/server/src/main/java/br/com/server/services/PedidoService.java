@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.server.entities.Cliente;
 import br.com.server.entities.Pedido;
+import br.com.server.exceptions.ClienteException;
 import br.com.server.exceptions.PedidoException;
 import br.com.server.repositorys.PedidoRepository;
 
@@ -64,6 +66,24 @@ public class PedidoService
 			{
 				throw new PedidoException("Ocorreu um erro ao tentar criar o pedido.\n " + e); 
 			}
+		}
+	}
+	
+	//Delete Mapping
+	public Pedido deletePedido(Long id)
+	{
+		Pedido pedidoDelete = repository.findById(id).
+				orElseThrow(() -> new PedidoException("Pedido com id '" + id + "' nao encontrado"));
+		
+		if (pedidoDelete != null)
+		{
+			Pedido pedidoSave = pedidoDelete;
+			repository.delete(pedidoDelete);
+			return pedidoSave;
+		}
+		else
+		{
+			throw new PedidoException("Impossivel deletar um pedido nulo.");
 		}
 	}
 	

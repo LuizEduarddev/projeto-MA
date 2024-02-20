@@ -13,11 +13,14 @@ import jakarta.persistence.Table;
 public class Pedido {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idPedido;
 
 	@Column(name = "id_mesa_pedido", unique = false, nullable = false)
 	private Long idMesaPedido;
+
+	@Column(name = "id_cliente_pedido", unique = false, nullable = false)
+	private Long idClientePedido;
 
 	@Column(name = "data_pedido", unique = false, nullable = false)
 	private String dataPedido;
@@ -34,13 +37,22 @@ public class Pedido {
 	public Pedido() {
 	}
 
-	public Pedido(Long idMesaPedido, String dataPedido, String horaPedido, boolean pedidoFinalizado,
-			float totalPedido) {
+	public Pedido(Long idMesaPedido, Long idClientePedido, String dataPedido, String horaPedido,
+			boolean pedidoFinalizado, float totalPedido) {
 		this.idMesaPedido = idMesaPedido;
+		this.idClientePedido = idClientePedido;
 		this.dataPedido = dataPedido;
 		this.horaPedido = horaPedido;
 		this.pedidoFinalizado = pedidoFinalizado;
 		this.totalPedido = totalPedido;
+	}
+
+	public Long getIdClientePedido() {
+		return idClientePedido;
+	}
+
+	public void setIdClientePedido(Long idClientePedido) {
+		this.idClientePedido = idClientePedido;
 	}
 
 	public float getTotalPedido() {
