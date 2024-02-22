@@ -28,23 +28,31 @@ public class Pedido {
 	@Column(name = "hora_pedido", unique = false, nullable = false)
 	private String horaPedido;
 
+	@Column(name = "pedido_pronto", unique = false, nullable = false)
+	private boolean pedidoPronto;
+
+	@Column(name = "total_pedido", unique = false, nullable = false)
+	private double totalPedido;
+
 	@Column(name = "pedido_finalizado", unique = false, nullable = false)
 	private boolean pedidoFinalizado;
 
-	@Column(name = "total_pedido", unique = false, nullable = false)
-	private float totalPedido;
+	@Column(name = "hora_pedido_finalizado", unique = false, nullable = false)
+	private String horaPedidoFinalizado;
 
 	public Pedido() {
 	}
 
-	public Pedido(Long idMesaPedido, Long idClientePedido, String dataPedido, String horaPedido,
-			boolean pedidoFinalizado, float totalPedido) {
+	public Pedido(Long idMesaPedido, Long idClientePedido, String dataPedido, String horaPedido, boolean pedidoPronto,
+			double totalPedido, boolean pedidoFinalizado, String horaPedidoFinalizado) {
 		this.idMesaPedido = idMesaPedido;
 		this.idClientePedido = idClientePedido;
 		this.dataPedido = dataPedido;
 		this.horaPedido = horaPedido;
-		this.pedidoFinalizado = pedidoFinalizado;
+		this.pedidoPronto = pedidoPronto;
 		this.totalPedido = totalPedido;
+		this.pedidoFinalizado = pedidoFinalizado;
+		this.horaPedidoFinalizado = horaPedidoFinalizado;
 	}
 
 	public Long getIdClientePedido() {
@@ -55,11 +63,11 @@ public class Pedido {
 		this.idClientePedido = idClientePedido;
 	}
 
-	public float getTotalPedido() {
+	public double getTotalPedido() {
 		return totalPedido;
 	}
 
-	public void setTotalPedido(float totalPedido) {
+	public void setTotalPedido(double totalPedido) {
 		this.totalPedido = totalPedido;
 	}
 
@@ -71,12 +79,12 @@ public class Pedido {
 		this.horaPedido = horaPedido;
 	}
 
-	public boolean isPedidoFinalizado() {
-		return pedidoFinalizado;
+	public boolean ispedidoPronto() {
+		return pedidoPronto;
 	}
 
-	public void setPedidoFinalizado(boolean pedidoFinalizado) {
-		this.pedidoFinalizado = pedidoFinalizado;
+	public void setpedidoPronto(boolean pedidoPronto) {
+		this.pedidoPronto = pedidoPronto;
 	}
 
 	public Long getIdMesaPedido() {
@@ -99,8 +107,24 @@ public class Pedido {
 		return dataPedido;
 	}
 
+	public boolean isPedidoFinalizado() {
+		return pedidoFinalizado;
+	}
+
+	public void setPedidoFinalizado(boolean pedidoFinalizado) {
+		this.pedidoFinalizado = pedidoFinalizado;
+	}
+
 	public void setDataPedido(String dataPedido) {
 		this.dataPedido = dataPedido;
+	}
+
+	public String getHoraPedidoFinalizado() {
+		return horaPedidoFinalizado;
+	}
+
+	public void setHoraPedidoFinalizado(String horaPedidoFinalizado) {
+		this.horaPedidoFinalizado = horaPedidoFinalizado;
 	}
 
 }

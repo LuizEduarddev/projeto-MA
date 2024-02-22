@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.server.entities.Cliente;
 import br.com.server.entities.Mesa;
 import br.com.server.exceptions.MesaException;
 import br.com.server.exceptions.ProdutoException;
+import br.com.server.repositorys.ClienteRepository;
 import br.com.server.repositorys.MesaRepository;
 
 @Service
@@ -16,6 +18,9 @@ public class MesaService
 {
 	@Autowired
 	private MesaRepository repository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 	//GetMapping
 	public List<Mesa> getAllMesa()

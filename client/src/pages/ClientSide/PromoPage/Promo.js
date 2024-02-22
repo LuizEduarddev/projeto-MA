@@ -16,7 +16,7 @@ export default function Promo()
             setPromo(newPromo);
           })
           .catch(error => {
-            alert(error);
+            alert(error.response.data.message);
           });
       }, []);
 
@@ -31,7 +31,7 @@ export default function Promo()
             setPromo(newPromo);
             })
             .catch(error => {
-            alert(error);
+            alert(error.response.data.message);
             });
         }
         getProducts();

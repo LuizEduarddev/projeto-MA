@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class CarrinhoException extends RuntimeException
+public class ItensPedidoException extends RuntimeException
 {
-	public CarrinhoException(String ex)
+	public ItensPedidoException(String ex)
 	{ 
 		super(ex);
 	}

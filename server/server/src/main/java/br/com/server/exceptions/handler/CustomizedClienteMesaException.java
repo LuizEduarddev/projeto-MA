@@ -12,11 +12,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import br.com.server.exceptions.ExceptionResponse;
 
 @ControllerAdvice
-public class CustomizedCarrinhoException extends ResponseEntityExceptionHandler{
+public class CustomizedClienteMesaException extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<ExceptionResponse>
-	CustomizedCarrinhoException(Exception ex, WebRequest request)
+	CustomizedClienteMesaException(Exception ex, WebRequest request)
 	{
 		ExceptionResponse response = new ExceptionResponse
 		(new Date(), ex.getMessage(), request.getDescription(false));

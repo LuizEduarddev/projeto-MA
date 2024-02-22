@@ -27,10 +27,16 @@ public class PedidoController
 		return service.getAllPedidos();
 	}
 	
-	@PostMapping("/get-by-id")
-	public Pedido getById(@RequestBody Long id)
+	@PostMapping("/get-by-id/{id}")
+	public Pedido getById(@PathVariable Long id)
 	{
 		return service.getPedidoById(id);
+	}
+	
+	@PostMapping("/get-by-mesa-id/{id}")
+	public Pedido getByMesaId(@PathVariable Long id)
+	{
+		return service.getPedidoByMesaId(id);
 	}
 	
 	@PostMapping("/post")
