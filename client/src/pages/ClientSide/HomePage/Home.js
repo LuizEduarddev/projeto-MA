@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { CiShoppingCart as Carrinho} from "react-icons/ci";
+import { MdTableBar as Table} from "react-icons/md";
+import { IoMdRestaurant as PedidoIcon} from "react-icons/io";
 import {useNavigate, Link} from 'react-router-dom';
 import api from "../../../services/api";
 
@@ -10,6 +12,9 @@ export default function Home()
 
     const [isLogado, setIsLogado] = useState(false);
     const [username, SetUsername] = useState('');
+    
+    const mesaToken = localStorage.getItem('mesaToken');
+    const URLmesa = '/mesa/' + localStorage.getItem('mesaToken')
 
     const [quantidade, setQuantidade] = useState(1);
     const increcrementQuantidade = () => setQuantidade(quantidade + 1);
@@ -98,7 +103,41 @@ export default function Home()
                 )}
             </div>
             <div>
-                <p>ir para o <Link to = '/cliente/carrinho'>carrinho</Link></p>
+                <button>
+                    <Link to = '/cliente/carrinho'>
+                        <h3>
+                            <Carrinho/>
+                            | Ir para o carrinho
+                        </h3>
+                    </Link>
+                </button>
+            </div>
+            <div>
+            <button>
+                    <Link to = '/cliente/pedidos'>
+                        <h3>
+                            <PedidoIcon/>
+                            | Ir para pedidos
+                        </h3>
+                    </Link>
+                </button>
+            </div>
+            <div>
+                {mesaToken ? (
+                        <button>
+                            <h3>
+                                <Link to = {URLmesa}>
+                                    <Table/>
+                                    | Ver a mesa
+                                </Link>
+                            </h3>
+                        </button>
+                        ) : (
+                            <div>
+                                
+                            </div>
+                        )
+                        }
             </div>
 
             <div>

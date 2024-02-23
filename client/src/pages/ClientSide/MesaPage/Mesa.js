@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import api from "../../../services/api";
 import { useParams, useNavigate , Link} from "react-router-dom";
+import { MdHome as Home} from "react-icons/md";
 
 export default function Mesa() {
     const { id } = useParams();
@@ -20,6 +21,7 @@ export default function Mesa() {
     useEffect(() => {
         api.post('http://localhost:8080/api/cliente/get-by-id/' + token)
         .then(response => {
+            localStorage.setItem('mesaToken', id)
             alert('Bem-vindo(a) a mesa ' + id + ' ' + response.data.nomeCliente);
         })
         .catch(error => {
@@ -66,6 +68,14 @@ export default function Mesa() {
 
     return (
         <div>
+            <div>
+                <h3>
+                    <Link to = "/home">
+                        <Home/>
+                        | Ir para a página inicial
+                    </Link>
+                </h3>
+            </div>
             <div>
                 <h1>Integrantes da mesa.</h1>
                 <ul>

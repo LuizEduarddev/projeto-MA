@@ -7,6 +7,7 @@ import Profile from "./pages/ClientSide/ProfilePage/Profile";
 import Carrinho from "./pages/ClientSide/CarrinhoPage/Carrinho";
 import Mesa from "./pages/ClientSide/MesaPage/Mesa";
 import Error from "./pages/ClientSide/ErrorPage/Error";
+import Pedido from "./pages/ClientSide/PedidosPage/Pedido";
 
 export default function Rotas(){
     return(
@@ -19,6 +20,7 @@ export default function Rotas(){
                 <Route path="/cliente/carrinho" Component={Carrinho}/>
                 <Route path="/mesa/:id" Component={Mesa} />
                 <Route path="/error/page" Component={Error}/>
+                <Route path="/cliente/pedidos" Component={Pedido}/>
             </Routes>
         </Router>
     );

@@ -7,8 +7,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.server.entities.Cliente;
 import br.com.server.entities.Pedido;
+import br.com.server.exceptions.ClienteException;
 import br.com.server.exceptions.PedidoException;
+import br.com.server.repositorys.ClienteRepository;
 import br.com.server.repositorys.PedidoRepository;
 
 @Service
@@ -16,6 +19,9 @@ public class PedidoService
 {
 	@Autowired
 	private PedidoRepository repository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 	//Get mapping
 	public List<Pedido> getAllPedidos()
@@ -59,6 +65,7 @@ public class PedidoService
 				pedido.setHoraPedido(horaPedidoFormatada);
 				pedido.setPedidoFinalizado(finalizado);
 				pedido.setpedidoPronto(pronto);
+				pedido.setPedidoPago(pronto);
 				pedido.setHoraPedidoFinalizado("");
 				
 				repository.saveAndFlush(pedido);
@@ -81,6 +88,21 @@ public class PedidoService
 		}
 		else {
 			return pedido0;
+		}
+	}
+	
+	public List<Pedido> getPedidoByIdCliente(Long id)
+	{
+		Cliente cliente0 = clienteRepository.findById(id)
+				.orElseThrow(() -> new ClienteException("Cliente com id '" + id + "' nao existe"));
+	
+		List<Pedido> listaPedidos = repository.findByIdClientePedido(id);
+		if (listaPedidos == null)
+		{
+			throw new PedidoException("O Cliente nao possui pedidos");
+		}
+		else {
+			return listaPedidos;
 		}
 	}
 	

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useNavigate, Link} from 'react-router-dom';
 import { FaCheck as Check} from "react-icons/fa";
-import { MdOutlinePayments as Cash,  MdOutlineCleaningServices as Clean, MdHome as Home} from "react-icons/md";
+import { MdOutlinePayments as Cash,  MdOutlineCleaningServices as Clean, MdHome as Home, MdTableBar as Table} from "react-icons/md";
 import api from "../../../services/api";
 
 export default function Carrinho()
@@ -11,6 +11,8 @@ export default function Carrinho()
     const [total, setTotal] = useState(0);
     const navigate = useNavigate ();
     const pagamento = 1000;
+    const URLmesa = '/mesa/' + localStorage.getItem('mesaToken')
+    const mesaToken = localStorage.getItem('mesaToken')
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
@@ -123,9 +125,18 @@ export default function Carrinho()
                 alert('Voce precisa estar logado para fazer esta operacao.' + "\nDirecionando para o Login");
                 navigate("/login")
             }
-            if (!mesaToken)
-            {
-                alert(localStorage.getItem('username') + " é necessário estar em uma mesa para poder efetuar um pedido")
+            else{
+                if (!mesaToken)
+                {
+                    const nomeUsuario = localStorage.getItem('username');
+                    if (nomeUsuario)
+                    {
+                        alert(nomeUsuario + ", é necessário estar em uma mesa para poder efetuar um pedido")
+                    }
+                    else{
+                        alert("Prezado, é necessário estar em uma mesa para poder efetuar um pedido")
+                    }
+                }
             }
         }
         else{
@@ -158,7 +169,9 @@ export default function Carrinho()
                     }
                     api.post('http://localhost:8080/api/pedido/item-pedido/post/' + idPedido + '/' + idProduto, itemDTO)
                     .then(response => {
-                        console.log(response.data)
+                        alert('Pedido realizado com sucesso, direcionado para pedidos....')
+                        CleanCart()
+                        navigate('/cliente/pedidos')
                     })
                     .catch(error => {
                         const errorMessage = error.response.data.message
@@ -211,21 +224,43 @@ export default function Carrinho()
                     </div>
                 ) : (
                     <div>
-                        <button onClick={CleanCart}>
-                            <h3>
-                                <Clean/>
-                                | Limpar Carrinho
-                            </h3>
-                        </button>
+                        <div>
+                            <button onClick={CleanCart}>
+                                <h3>
+                                    <Clean/>
+                                    | Limpar Carrinho
+                                </h3>
+                            </button>
+                        </div>
 
-                        <button>
-                            <h3>
-                                <Link to = "/home">
-                                    <Home/>
-                                    | Ir para a página inicial
-                                </Link>
-                            </h3>
-                        </button>
+                        <div>
+                            <button>
+                                <h3>
+                                    <Link to = "/home">
+                                        <Home/>
+                                        | Ir para a página inicial
+                                    </Link>
+                                </h3>
+                            </button>
+                        </div>
+
+                        <div>    
+                            {mesaToken ? (
+                                <button>
+                                    <h3>
+                                        <Link to = {URLmesa}>
+                                            <Table/>
+                                            | Ver a mesa
+                                        </Link>
+                                    </h3>
+                                </button>
+                            ) : (
+                                <div>
+                                    
+                                </div>
+                            )
+                        }
+                        </div>
                         
                     </div>
                 )

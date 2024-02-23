@@ -40,11 +40,14 @@ public class Pedido {
 	@Column(name = "hora_pedido_finalizado", unique = false, nullable = false)
 	private String horaPedidoFinalizado;
 
+	@Column(name = "pedido_pago", unique = false, nullable = false)
+	private boolean pedidoPago;
+
 	public Pedido() {
 	}
 
 	public Pedido(Long idMesaPedido, Long idClientePedido, String dataPedido, String horaPedido, boolean pedidoPronto,
-			double totalPedido, boolean pedidoFinalizado, String horaPedidoFinalizado) {
+			double totalPedido, boolean pedidoFinalizado, String horaPedidoFinalizado, boolean pedidoPago) {
 		this.idMesaPedido = idMesaPedido;
 		this.idClientePedido = idClientePedido;
 		this.dataPedido = dataPedido;
@@ -53,6 +56,7 @@ public class Pedido {
 		this.totalPedido = totalPedido;
 		this.pedidoFinalizado = pedidoFinalizado;
 		this.horaPedidoFinalizado = horaPedidoFinalizado;
+		this.pedidoPago = pedidoPago;
 	}
 
 	public Long getIdClientePedido() {
@@ -117,6 +121,15 @@ public class Pedido {
 
 	public void setDataPedido(String dataPedido) {
 		this.dataPedido = dataPedido;
+	}
+	
+
+	public boolean isPedidoPago() {
+		return pedidoPago;
+	}
+
+	public void setPedidoPago(boolean pedidoPago) {
+		this.pedidoPago = pedidoPago;
 	}
 
 	public String getHoraPedidoFinalizado() {

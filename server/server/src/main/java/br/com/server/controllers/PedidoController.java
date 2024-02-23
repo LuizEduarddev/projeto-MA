@@ -39,6 +39,12 @@ public class PedidoController
 		return service.getPedidoByMesaId(id);
 	}
 	
+	@PostMapping("/get-by-id-cliente/{id}")
+	public List<Pedido> getByClienteId(@PathVariable Long id)
+	{
+		return service.getPedidoByIdCliente(id);
+	}
+	
 	@PostMapping("/post")
 	public Pedido post(@RequestBody Pedido pedido)
 	{
