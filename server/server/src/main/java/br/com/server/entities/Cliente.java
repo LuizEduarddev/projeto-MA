@@ -1,7 +1,5 @@
 package br.com.server.entities;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +31,7 @@ public class Cliente {
 	private String nomeCliente;
 
 	@Column(name = "birth_day", unique = false, nullable = true)
-	private Date aniversarioCliente;
+	private String aniversarioCliente;
 
 	@Column(name = "senha_cliente", unique = false, nullable = false)
 	private String senhaCliente;
@@ -42,7 +40,7 @@ public class Cliente {
 	}
 
 	public Cliente(String cpfCliente, String numeroCliente, String enderecoCliente, String idadeCliente,
-			String nomeCliente, Date aniversarioCliente, String senhaCliente) {
+			String nomeCliente, String aniversarioCliente, String senhaCliente) {
 		this.cpfCliente = cpfCliente;
 		this.numeroCliente = numeroCliente;
 		this.enderecoCliente = enderecoCliente;
@@ -108,11 +106,11 @@ public class Cliente {
 		this.nomeCliente = nomeCliente;
 	}
 
-	public Date getAniversarioCliente() {
+	public String getAniversarioCliente() {
 		return aniversarioCliente;
 	}
 
-	public void setAniversarioCliente(Date aniversarioCliente) {
+	public void setAniversarioCliente(String aniversarioCliente) {
 		this.aniversarioCliente = aniversarioCliente;
 	}
 

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.server.entities.Cliente;
 import br.com.server.entities.ClienteMesa;
+import br.com.server.entities.dto.clientedto.ClienteShowMesaDTO;
 import br.com.server.services.ClienteMesaService;
 
 @RestController
@@ -35,7 +35,7 @@ public class ClienteMesaController {
 	}
 	
 	@PostMapping("/get-clientes-by-mesa-id/{id}")
-	public List<Cliente> getClienteMesaByMesa(@PathVariable Long id)
+	public List<ClienteShowMesaDTO> getClienteMesaByMesa(@PathVariable Long id)
 	{
 		return service.getClienteMesaByIdMesa(id);
 	}

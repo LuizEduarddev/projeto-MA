@@ -59,7 +59,6 @@ public class PedidoService
 				pedido.setHoraPedido(horaPedidoFormatada);
 				pedido.setPedidoFinalizado(finalizado);
 				pedido.setpedidoPronto(pronto);
-				pedido.setTotalPedido(0);
 				pedido.setHoraPedidoFinalizado("");
 				
 				repository.saveAndFlush(pedido);

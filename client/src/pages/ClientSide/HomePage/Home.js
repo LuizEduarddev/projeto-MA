@@ -7,7 +7,9 @@ export default function Home()
 {
     const [produtos, setProdutos] = useState([]);
     const [carrinho, setCarrinho] = useState([]);
-    const pagamento = 10;
+
+    const [isLogado, setIsLogado] = useState(false);
+    const [username, SetUsername] = useState('');
 
     const [quantidade, setQuantidade] = useState(1);
     const increcrementQuantidade = () => setQuantidade(quantidade + 1);
@@ -16,6 +18,30 @@ export default function Home()
         decrementQuantidade = () => setQuantidade(1);
     }
 
+    useEffect(() => {
+        const user = localStorage.getItem('username');
+        if (!user)
+        {
+            setIsLogado(false);
+        }else{
+            SetUsername(user);
+            setIsLogado(true);
+        }
+    },)
+
+    useEffect(() => {
+        async function getProducts()
+        {
+            api.get('http://localhost:8080/api/produto/get-all')
+            .then(response => {
+            setProdutos(response.data);
+            })
+            .catch(error => {
+            alert(error);
+            });
+        }
+        getProducts();
+    }, [produtos]);
 
     function addToCart(produto, quantidade) {
 
@@ -36,6 +62,7 @@ export default function Home()
                     nomeProduto: produto.nomeProduto,
                     idProduto: produto.idProduto,
                     quantidade: quantidade,
+                    valorUnitarioItem: produto.precoProduto,
                     valorTotalIten: produto.precoProduto * quantidade
                 });
                 localStorage.setItem('cart', JSON.stringify(cartItens));
@@ -45,48 +72,32 @@ export default function Home()
         catch(error)
         {
             const cartItens = [{
-                idProduto: produto.idProduto,
                 nomeProduto: produto.nomeProduto,
+                idProduto: produto.idProduto,
                 quantidade: quantidade,
-                valorTotalIten: quantidade * produto.precoProduto
+                valorUnitarioItem: produto.precoProduto,
+                valorTotalIten: produto.precoProduto * quantidade
             }];
             localStorage.setItem('cart', JSON.stringify(cartItens));
             setCarrinho([...cartItens]);
         }
     }
-    
-    useEffect(() => {
-        api.get('http://localhost:8080/api/produto/get-all')
-            .then(response => {
-            setProdutos(response.data);
-            })
-            .catch(error => {
-            alert(error);
-            });
-    }, []);
-
-    useEffect(() => {
-        async function getProducts()
-        {
-            api.get('http://localhost:8080/api/produto/get-all')
-            .then(response => {
-            setProdutos(response.data);
-            })
-            .catch(error => {
-            alert(error);
-            });
-        }
-
-        getProducts();
-    }, [produtos]);
-
 
     return(
         <div>
             <div>
-                <h1>
-                    Bem-vindo(a), <Link to = '/cliente/perfil'>{localStorage.getItem('username')}</Link>
-                </h1>
+                {isLogado ? 
+                (
+                    <h1>
+                        Bem-vindo(a), <Link to="/cliente/perfil">{username}</Link>
+                    </h1>
+                ) 
+                : 
+                (
+                    <h1>Bem-vindo(a)</h1>
+                )}
+            </div>
+            <div>
                 <p>ir para o <Link to = '/cliente/carrinho'>carrinho</Link></p>
             </div>
 

@@ -33,7 +33,7 @@ export default function Mesa() {
     useEffect(() => {
         api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + id)
         .then(response => {
-            setIntegrantes(response.data.clientesMesa);
+            setIntegrantes(response.data);
         })
         .catch(error => {
             const errorMessageApi = error.response.data.message
@@ -47,22 +47,22 @@ export default function Mesa() {
         });
     }, []);
 
-    /*
     useEffect(() => {
-        async function getIntegrantes() {
-            api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + id)
-            .then(response => {
-                setIntegrantes(response.data.clientesMesa);
-            })
-            .catch(error => {
+        api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + id)
+        .then(response => {
+            setIntegrantes(response.data);
+        })
+        .catch(error => {
+            const errorMessageApi = error.response.data.message
+            if(!errorMessageApi)
+            {
+                alert(error)
+            }
+            else{
                 alert(error.response.data.message);
-            });
-        }
-        
-        getIntegrantes();
-
+            }
+        });
     }, [integrantes]);
-    */
 
     return (
         <div>

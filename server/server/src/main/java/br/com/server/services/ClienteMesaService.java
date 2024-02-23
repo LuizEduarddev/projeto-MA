@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.server.entities.Cliente;
 import br.com.server.entities.ClienteMesa;
 import br.com.server.entities.Mesa;
+import br.com.server.entities.dto.clientedto.ClienteShowMesaDTO;
 import br.com.server.exceptions.ClienteMesaException;
 import br.com.server.repositorys.ClienteMesaRepository;
 import br.com.server.repositorys.ClienteRepository;
@@ -46,9 +47,9 @@ public class ClienteMesaService {
 	}
 	
 	//PostMapping
-	public List<Cliente> getClienteMesaByIdMesa(Long id)
+	public List<ClienteShowMesaDTO> getClienteMesaByIdMesa(Long id)
 	{
-		ClienteMesa clienteMesa0 = repository.findByIdMesa(id);
+		List<ClienteMesa> clienteMesa0 = repository.findByIdMesa(id);
 		if (clienteMesa0 == null)
 		{
 			throw new ClienteMesaException("Nenhuma mesa com id '" + id + "' na mesa.");
@@ -74,7 +75,13 @@ public class ClienteMesaService {
 				throw new ClienteMesaException("Nenhum cliente encontrado");
 			}
 			else {
-				return listaClientes;
+				List<ClienteShowMesaDTO> listaClientesDTO = new ArrayList<>();
+				for (Cliente cliente: listaClientes)
+				{
+					ClienteShowMesaDTO clienteDTO = new ClienteShowMesaDTO(cliente.getNomeCliente(), cliente.getIdCliente());
+					listaClientesDTO.add(clienteDTO);
+				}
+				return listaClientesDTO;
 			}
 		}		
 	}

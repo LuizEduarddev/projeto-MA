@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import api from "../../../services/api";
 
@@ -8,68 +8,76 @@ export default function Login()
     const [senhaDTO, setSenhaDTO] = useState('');
     const navigate = useNavigate ();
     const mesaToken = localStorage.getItem('mesaToken')
-    const clienteToken = localStorage.getItem('clienteToken')
+    const [clienteToken, setClienteToken] = useState(false);
+
+
+    useEffect(() => {
+        const getTokenCliente = localStorage.getItem('clienteToken');
+        if (getTokenCliente && !clienteToken)
+        {
+            setClienteToken(true);
+            if (!mesaToken)
+            {
+                alert('Voce ja está logado.\nRedirecionando..');
+                navigate("/promo");
+            }
+            else{
+                alert('Voce já está logado. Redirecionando para uma mesa.');
+                navigate("/mesa/" + mesaToken);
+            }
+        }
+    }, [clienteToken])
+
 
     async function tryLogin(e)
     {
         e.preventDefault();
-
-        if (clienteToken)
+        
+        if (!cpfDTO || !senhaDTO)
         {
-            alert('Voce ja está logado')
-            if (!mesaToken)
-            {
-                navigate("/promo")
-            }
-            else{
-                navigate("/mesa/" + mesaToken)
-            }
+            alert('Por favor, preencha todos os campos.');
+            return;
         }
-        else{
-            if (!cpfDTO || !senhaDTO)
-            {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-            else
-            {
-                const credentials = {
-                    cpfDTO,
-                    senhaDTO
+        else
+        {
+            const credentials = {
+                cpfDTO,
+                senhaDTO
+            };
+            
+            api.post('http://localhost:8080/api/cliente/check-in', credentials)
+            .then(responseCliente => {
+                if (mesaToken !== null && mesaToken < 1 || mesaToken > 9)
+                {
+                    alert('mesa nao registrada no sistema')
                 }
-                
-                api.post('http://localhost:8080/api/cliente/check-in', credentials)
-                .then(responseCliente => {
-                    if (mesaToken != null && mesaToken < 1 || mesaToken > 9)
+                else{
+                    if (mesaToken === null)
                     {
-                        alert('mesa nao registrada no sistema')
+                        localStorage.setItem('username', responseCliente.data.nomeClienteDTO);
+                        localStorage.setItem('clienteToken', responseCliente.data.idClienteDTO);
+                        navigate("/promo")
                     }
                     else{
-                        if (mesaToken == null)
-                        {
-                            navigate("/promo")
+                        const clienteMesa = {
+                            "idCliente": responseCliente.data.idClienteDTO,
+                            "idMesa": mesaToken
                         }
-                        else{
-                            const clienteMesa = {
-                                "idCliente": responseCliente.data.idClienteDTO,
-                                "idMesa": mesaToken
-                            }
-                            api.post('http://localhost:8080/api/mesa/cliente/add', clienteMesa)
-                            .then(() => {
-                                localStorage.setItem('username', responseCliente.data.nomeClienteDTO);
-                                localStorage.setItem('clienteToken', responseCliente.data.idClienteDTO);
-                                navigate('/mesa/' + mesaToken);
-                            })
-                            .catch(error => {
-                                alert(error.response.data.message)
-                            })
-                        }
+                        api.post('http://localhost:8080/api/mesa/cliente/add', clienteMesa)
+                        .then(() => {
+                            localStorage.setItem('username', responseCliente.data.nomeClienteDTO);
+                            localStorage.setItem('clienteToken', responseCliente.data.idClienteDTO);
+                            navigate('/mesa/' + mesaToken);
+                        })
+                        .catch(error => {
+                            alert(error.response.data.message)
+                        })
                     }
-                })
-                .catch(error => {
-                    alert(error.response.data.message);
-                })
-            }
+                }
+            })
+            .catch(error => {
+                alert(error.response.data.message);
+            })
         }
     }
 
