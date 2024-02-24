@@ -36,7 +36,23 @@ public class ItensPedidoService {
 	{
 		ItensPedido itemPedido1 = repository.findById(id)
 				.orElseThrow(() -> new ItensPedidoException("Nenhum item de pedido encontrado com o id: " + id));
+		
+		
 		return itemPedido1;
+	}
+	
+	public List<ItensPedido> getItensPedidoByIdPedido(Long id)
+	{
+		Pedido pedido0 = pedidoRepository.findById(id)
+				.orElseThrow(() -> new ItensPedidoException("Pedido com id '" + "' nao encontrado"));
+		List<ItensPedido> listaItensPedido = repository.findByIdPedido(id);
+		if (listaItensPedido != null)
+		{
+			return listaItensPedido;
+		}
+		else {
+			throw new ItensPedidoException("Cliente nao possui nenhum item de pedido ativo");
+		}
 	}
 	
 	//Post Mapping

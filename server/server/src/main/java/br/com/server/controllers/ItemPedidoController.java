@@ -32,6 +32,12 @@ public class ItemPedidoController {
 	{
 		return service.getItensPedidoById(id);
 	}
+	
+	@PostMapping("/get-by-id-pedido/{id}")
+	public List<ItensPedido> getByIdPedido(@PathVariable Long id)
+	{
+		return service.getItensPedidoByIdPedido(id);
+	}
 
 	@PostMapping("/post/{idPedido}/{idProduto}")
 	public ItensPedido post(@RequestBody ItensPedido itemPedido, @PathVariable Long idPedido, @PathVariable Long idProduto)
