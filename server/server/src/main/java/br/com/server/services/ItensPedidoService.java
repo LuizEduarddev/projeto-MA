@@ -1,5 +1,6 @@
 package br.com.server.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import br.com.server.entities.ItensPedido;
 import br.com.server.entities.Pedido;
 import br.com.server.entities.Produto;
+import br.com.server.entities.itensPedidos.dto.ItensPedidosDTO;
 import br.com.server.exceptions.ItensPedidoException;
+import br.com.server.exceptions.ProdutoException;
 import br.com.server.repositorys.ItensPedidoRepository;
 import br.com.server.repositorys.PedidoRepository;
 import br.com.server.repositorys.ProdutoRepository;
@@ -41,14 +44,22 @@ public class ItensPedidoService {
 		return itemPedido1;
 	}
 	
-	public List<ItensPedido> getItensPedidoByIdPedido(Long id)
+	public List<ItensPedidosDTO> getItensPedidoByIdPedido(Long id)
 	{
 		Pedido pedido0 = pedidoRepository.findById(id)
 				.orElseThrow(() -> new ItensPedidoException("Pedido com id '" + "' nao encontrado"));
 		List<ItensPedido> listaItensPedido = repository.findByIdPedido(id);
 		if (listaItensPedido != null)
 		{
-			return listaItensPedido;
+			List<ItensPedidosDTO> listaDTO = new ArrayList<ItensPedidosDTO>();
+			for(ItensPedido itens: listaItensPedido)
+			{
+				Produto produto0 = produtoRepository.findById(itens.getIdProduto())
+						.orElseThrow(() -> new ProdutoException("Produto com id '" + itens.getIdProduto() + "' nao existe."));
+				ItensPedidosDTO itemMap = new ItensPedidosDTO(itens.getQuantidadeProduto(), produto0.getNomeProduto());
+				listaDTO.add(itemMap);
+			}
+			return listaDTO;
 		}
 		else {
 			throw new ItensPedidoException("Cliente nao possui nenhum item de pedido ativo");

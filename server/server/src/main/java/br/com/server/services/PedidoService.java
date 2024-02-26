@@ -12,6 +12,7 @@ import br.com.server.entities.Pedido;
 import br.com.server.exceptions.ClienteException;
 import br.com.server.exceptions.PedidoException;
 import br.com.server.repositorys.ClienteRepository;
+import br.com.server.repositorys.ItensPedidoRepository;
 import br.com.server.repositorys.PedidoRepository;
 
 @Service
@@ -22,6 +23,9 @@ public class PedidoService
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ItensPedidoRepository itensRepository;
 	
 	//Get mapping
 	public List<Pedido> getAllPedidos()

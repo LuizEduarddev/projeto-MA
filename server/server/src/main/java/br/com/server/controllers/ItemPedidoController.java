@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.server.entities.ItensPedido;
+import br.com.server.entities.itensPedidos.dto.ItensPedidosDTO;
 import br.com.server.services.ItensPedidoService;
 
 @RestController
@@ -34,7 +35,7 @@ public class ItemPedidoController {
 	}
 	
 	@PostMapping("/get-by-id-pedido/{id}")
-	public List<ItensPedido> getByIdPedido(@PathVariable Long id)
+	public List<ItensPedidosDTO> getByIdPedido(@PathVariable Long id)
 	{
 		return service.getItensPedidoByIdPedido(id);
 	}
