@@ -45,6 +45,12 @@ public class PedidoController
 		return service.getPedidoByIdCliente(id);
 	}
 	
+	@PostMapping("/check-out-cliente/{mesaId}/{clienteId}")
+	public Object checkOutMesa(@PathVariable Long mesaId, @PathVariable Long clienteId)
+	{
+		return service.checkOutClienteMesa(mesaId, clienteId);
+	}
+	
 	@PostMapping("/post")
 	public Pedido post(@RequestBody Pedido pedido)
 	{

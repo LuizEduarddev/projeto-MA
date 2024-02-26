@@ -1,18 +1,23 @@
 package br.com.server.services;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.server.entities.Cliente;
+import br.com.server.entities.Mesa;
 import br.com.server.entities.Pedido;
 import br.com.server.exceptions.ClienteException;
+import br.com.server.exceptions.MesaException;
 import br.com.server.exceptions.PedidoException;
 import br.com.server.repositorys.ClienteRepository;
 import br.com.server.repositorys.ItensPedidoRepository;
+import br.com.server.repositorys.MesaRepository;
 import br.com.server.repositorys.PedidoRepository;
 
 @Service
@@ -26,6 +31,9 @@ public class PedidoService
 	
 	@Autowired
 	private ItensPedidoRepository itensRepository;
+	
+	@Autowired
+	private MesaRepository mesaRepository;
 	
 	//Get mapping
 	public List<Pedido> getAllPedidos()
@@ -108,6 +116,23 @@ public class PedidoService
 		else {
 			return listaPedidos;
 		}
+	}
+	
+	//PutMapping
+	public Object checkOutClienteMesa(Long mesaId, Long clienteId)
+	{
+		Mesa mesa0 = mesaRepository.findById(mesaId)
+				.orElseThrow(() -> new MesaException("Mesa com id '" + mesaId + "' nao encontrado"));
+		Cliente cliente0 = clienteRepository.findById(clienteId)
+				.orElseThrow(() -> new ClienteException("Cliente com id '" + clienteId + "' nao encontrado."));
+		List<Pedido> pedidoEmAberto = repository.findByIdClientePedido(clienteId);
+		
+		pedidoEmAberto.stream()
+			.filter(itens -> 
+				itens.isPedidoPago() == true && itens.getIdMesaPedido() == mesaId
+			);
+		
+		return pedidoEmAberto;		
 	}
 	
 	//PutMapping
