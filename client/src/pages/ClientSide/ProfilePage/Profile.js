@@ -15,7 +15,7 @@ export default function Profile()
     useEffect(() => {
         async function fetchData() {
             try {
-                const token = localStorage.getItem('token')
+                const token = localStorage.getItem('clienteToken')
                 const response = await api.post('http://localhost:8080/api/cliente/get-by-id/' + token);
                 setCpfCliente(response.data.cpfCliente);
                 setEnderecoCliente(response.data.enderecoCliente);
@@ -36,7 +36,7 @@ export default function Profile()
     {
         e.preventDefault();
 
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('clienteToken');
         let cliente = {
             cpfCliente,
             numeroCliente,
@@ -59,7 +59,7 @@ export default function Profile()
 
     return (
         <div>
-            <h1>Perfil de {localStorage.getItem('username')}</h1>
+            <h1>Perfil de {nomeCliente}</h1>
             <div>
                 <ul>
                     <li>nome: <strong>{nomeCliente}</strong></li>

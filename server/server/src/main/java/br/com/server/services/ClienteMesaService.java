@@ -2,6 +2,7 @@ package br.com.server.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,7 @@ public class ClienteMesaService {
 	}
 	
 	//PostMapping
-	public ClienteMesa addClienteMesa(ClienteMesa clienteMesa)
+	public void addClienteMesa(ClienteMesa clienteMesa)
 	{
 		if (clienteMesa == null)
 		{
@@ -100,19 +101,26 @@ public class ClienteMesaService {
 			Mesa mesa0 = mesaRepository.findById(clienteMesa.getIdMesa())
 					.orElseThrow(() -> new ClienteMesaException("Mesa com id '" + clienteMesa.getIdMesa() + "' nao encontrada"));
 			
-			repository.saveAndFlush(clienteMesa);
-			return clienteMesa;
+			ClienteMesa clienteMesa0 = repository.findByIdClienteAndIdMesa(clienteMesa.getIdCliente(), clienteMesa.getIdMesa());
+			if (clienteMesa0 == null)
+			{				
+				repository.saveAndFlush(clienteMesa);
+				return;
+			}
+			else {
+				return;
+			}
 		}
 	}
 
 	//Delete mapping
-	public ClienteMesa deleteClienteMesa(ClienteMesa mesaClienteDelete)
+	public ClienteMesa deleteClienteMesa(Long idCliente, Long idMesa)
 	{
-		Cliente cliente0 = clienteRepository.findById(mesaClienteDelete.getIdCliente())
-				.orElseThrow(() -> new ClienteMesaException("Cliente com id '" + mesaClienteDelete.getIdCliente() + "' nao encontrado."));
+		Cliente cliente0 = clienteRepository.findById(idCliente)
+				.orElseThrow(() -> new ClienteMesaException("Cliente com id '" + idCliente + "' nao encontrado."));
 		
-		Mesa mesa0 = mesaRepository.findById(mesaClienteDelete.getIdMesa())
-				.orElseThrow(() -> new ClienteMesaException("Mesa com id '" + mesaClienteDelete.getIdMesa() + "' nao encontrada."));
+		Mesa mesa0 = mesaRepository.findById(idMesa)
+				.orElseThrow(() -> new ClienteMesaException("Mesa com id '" + idMesa + "' nao encontrada."));
 				
 			
 		if (mesa0 == null)
@@ -124,13 +132,13 @@ public class ClienteMesaService {
 			throw new ClienteMesaException("Impossível deletar com um cliente nulo.");
 		}
 		
-		ClienteMesa clienteAndMesa = repository.findByIdClienteAndIdMesa(mesaClienteDelete.getIdCliente(), mesaClienteDelete.getIdMesa());
+		ClienteMesa clienteAndMesa = repository.findByIdClienteAndIdMesa(idCliente, idMesa);
 		if (clienteAndMesa == null)
 		{
-			throw new ClienteMesaException("Registro nulo, impossível de deletar.");
+			throw new ClienteMesaException("Cliente/Mesa incorretos, impossível de deletar.");
 		}
 		else {
-			repository.deleteByIdClienteAndIdMesa(mesaClienteDelete.getIdCliente(), mesaClienteDelete.getIdMesa());
+			repository.deleteById(clienteAndMesa.getIdClienteMesa());
 			return clienteAndMesa;
 		}
 	}

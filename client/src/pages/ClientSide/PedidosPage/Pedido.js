@@ -1,40 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, Link} from 'react-router-dom';
 import api from "../../../services/api";
+import { MdHome as Home} from "react-icons/md";
 
 export default function Pedido()
 {
-    const [clienteLogado, setClienteLogado] = useState('');
     const [tokenClienteLogado, setTokenClienteLogado] = useState('');
-
+    const [clienteUsername, setClienteUsername] = useState('');
     const [pedidosCliente, setPedidosClientes] = useState([]);
     const [pedidoAtivo, setPedidoAtivo] = useState(false);
 
-    const navigate = useNavigate ();
-
-    /*
-    useEffect(() => {
-        const tokenClienteAtivo = localStorage.getItem('clienteToken');
-        if (tokenClienteAtivo)
-        {
-            api.post('http://localhost:8080/api/pedido/get-by-id-cliente/' + tokenClienteAtivo)
-            .then(response => {
-                setPedidoAtivo(true);
-                setPedidosClientes(response.data)
-            })
-            .catch(error => {
-                const errorMessage = error.response.data.message;
-                if (errorMessage)
-                {
-                    alert(errorMessage)
-                }
-                else{
-                    alert('Erro de requisicao ou erro de URL.' + '\n' + error);
-                }
-            })
-        }
-    }, [])
-    */
+    const navigate = useNavigate();
 
     function getAllPedidos(pedido)
     {
@@ -44,6 +20,25 @@ export default function Pedido()
         })
         setPedidosClientes(pedidosList);
     }
+
+    async function getUsername(token)
+    {
+        api.post('http://localhost:8080/api/cliente/get-by-id/' + token)
+        .then(responseUsername => {
+            setClienteUsername(responseUsername.data.nomeCliente);
+            return;
+        })
+        .catch(error => {
+            const errorMessage = error.response.data.message;
+            if (errorMessage)
+            {
+                alert(errorMessage)
+            }
+            else{
+                alert('Erro de requisicao ou erro de URL.' + '\n' + error);
+            }
+        })
+    }
     
     useEffect(() => {
         async function getPedidos()
@@ -51,6 +46,8 @@ export default function Pedido()
             const tokenClienteAtivo = localStorage.getItem('clienteToken');
             if (tokenClienteAtivo)
             {
+                setTokenClienteLogado(tokenClienteAtivo);
+                getUsername(tokenClienteAtivo);
                 api.post('http://localhost:8080/api/pedido/get-by-id-cliente/' + tokenClienteAtivo)
                 .then(response => {
                     if (response)
@@ -73,30 +70,13 @@ export default function Pedido()
                     }
                 })
             }
+            else{
+                navigate('/login');
+            }
         }
 
         getPedidos()
     }, [pedidosCliente])
-            
-
-    useEffect(() => {
-        async function getCliente()
-        {
-            const getCliente = localStorage.getItem('username');
-            const getTokenCliente = localStorage.getItem('clienteToken')
-            if (getCliente && getTokenCliente)
-            {
-                setTokenClienteLogado(getTokenCliente);
-                setClienteLogado(getCliente);
-            }
-            else{
-                alert('É necessário estar logado para acessar esta área, voltando para a página inicial.')
-                navigate('/home')
-            }
-        }
-
-        getCliente()
-    }, [clienteLogado])
 
     function toItensPedidos(id)
     {
@@ -107,11 +87,19 @@ export default function Pedido()
         <div>
             {pedidosCliente && pedidosCliente.length > 0 ? (
                 <div>
+                    <div>
+                        <button>
+                        <Link to = "/home">
+                            <Home/>
+                            | Ir para a página inicial
+                        </Link>
+                        </button>
+                    </div>
                     <ul>
                         {pedidosCliente.map(pedido => (
                             <button onClick={() => toItensPedidos(pedido.idPedido)}>
                                 <li key={pedido.idPedido}>
-                                    <h3>Cliente: <strong>{clienteLogado}</strong></h3>
+                                    <h3>Cliente: <strong>{clienteUsername}</strong></h3>
                                     <h3>Mesa {pedido.idMesaPedido}</h3>
                                     <h3>
                                         {pedido.pedidoPronto ? (
@@ -126,7 +114,7 @@ export default function Pedido()
                                     </h3>
                                     <h3>Total do pedido R$<strong>{pedido.totalPedido}</strong></h3>
                                     <h3>
-                                        {pedido.pedidoFinalizado ? (
+                                        {pedido.pedidoPago ? (
                                             <>
                                             O pedido foi finalizado e pago.
                                             </>
@@ -144,7 +132,7 @@ export default function Pedido()
             ) : (
                 <div>
                     <h2>
-                        Olá, <strong>{clienteLogado}</strong>, esta é a sua área de pedidos. Assim que um pedido for feito ele aparecerá aqui!
+                        Olá, <strong>{clienteUsername}</strong>, esta é a sua área de pedidos. Assim que um pedido for feito ele aparecerá aqui!
                     </h2>
                 </div>
             )}

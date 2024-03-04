@@ -1,10 +1,8 @@
 package br.com.server.services;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +60,6 @@ public class PedidoService
 				Pedido pedido = novoPedido;
 				
 				Calendar dataAtual = Calendar.getInstance();
-				boolean finalizado = false;
 				boolean pronto = false;
 				int hora = dataAtual.get(Calendar.HOUR_OF_DAY);
 				int minuto = dataAtual.get(Calendar.MINUTE);
@@ -75,7 +72,6 @@ public class PedidoService
 				
 				pedido.setDataPedido(dataPedidoFormatada);
 				pedido.setHoraPedido(horaPedidoFormatada);
-				pedido.setPedidoFinalizado(finalizado);
 				pedido.setpedidoPronto(pronto);
 				pedido.setPedidoPago(pronto);
 				pedido.setHoraPedidoFinalizado("");

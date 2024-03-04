@@ -8,26 +8,6 @@ export default function Login()
     const [senhaDTO, setSenhaDTO] = useState('');
     const navigate = useNavigate ();
     const mesaToken = localStorage.getItem('mesaToken')
-    const [clienteToken, setClienteToken] = useState(false);
-
-
-    useEffect(() => {
-        const getTokenCliente = localStorage.getItem('clienteToken');
-        if (getTokenCliente && !clienteToken)
-        {
-            setClienteToken(true);
-            if (!mesaToken)
-            {
-                alert('Voce ja está logado.\nRedirecionando..');
-                navigate("/promo");
-            }
-            else{
-                alert('Voce já está logado. Redirecionando para uma mesa.');
-                navigate("/mesa/" + mesaToken);
-            }
-        }
-    }, [clienteToken])
-
 
     async function tryLogin(e)
     {
@@ -54,7 +34,6 @@ export default function Login()
                 else{
                     if (mesaToken === null)
                     {
-                        localStorage.setItem('username', responseCliente.data.nomeClienteDTO);
                         localStorage.setItem('clienteToken', responseCliente.data.idClienteDTO);
                         navigate("/promo")
                     }
@@ -65,7 +44,6 @@ export default function Login()
                         }
                         api.post('http://localhost:8080/api/mesa/cliente/add', clienteMesa)
                         .then(() => {
-                            localStorage.setItem('username', responseCliente.data.nomeClienteDTO);
                             localStorage.setItem('clienteToken', responseCliente.data.idClienteDTO);
                             navigate('/mesa/' + mesaToken);
                         })

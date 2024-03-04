@@ -56,7 +56,7 @@ public class ItensPedidoService {
 			{
 				Produto produto0 = produtoRepository.findById(itens.getIdProduto())
 						.orElseThrow(() -> new ProdutoException("Produto com id '" + itens.getIdProduto() + "' nao existe."));
-				ItensPedidosDTO itemMap = new ItensPedidosDTO(itens.getQuantidadeProduto(), produto0.getNomeProduto());
+				ItensPedidosDTO itemMap = new ItensPedidosDTO(itens.getQuantidadeProduto(), produto0.getPrecoProduto() ,produto0.getNomeProduto());
 				listaDTO.add(itemMap);
 			}
 			return listaDTO;

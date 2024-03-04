@@ -9,12 +9,11 @@ export default function Home()
 {
     const [produtos, setProdutos] = useState([]);
     const [carrinho, setCarrinho] = useState([]);
-
     const [isLogado, setIsLogado] = useState(false);
-    const [username, SetUsername] = useState('');
-    
+    const [username, setUsername] = useState('');
     const mesaToken = localStorage.getItem('mesaToken');
     const URLmesa = '/mesa/' + localStorage.getItem('mesaToken')
+    const navigate = useNavigate();
 
     const [quantidade, setQuantidade] = useState(1);
     const increcrementQuantidade = () => setQuantidade(quantidade + 1);
@@ -24,15 +23,35 @@ export default function Home()
     }
 
     useEffect(() => {
-        const user = localStorage.getItem('username');
-        if (!user)
+        async function getNomeCliente()
         {
-            setIsLogado(false);
-        }else{
-            SetUsername(user);
-            setIsLogado(true);
+            const sessionId = localStorage.getItem('clienteToken');
+            if (sessionId)
+            {
+                api.post('http://localhost:8080/api/cliente/get-by-id/' + sessionId)
+                .then(responseCliente => {
+                    setIsLogado(true);
+                    setUsername(responseCliente.data.nomeCliente);
+                })
+                .catch(error => {
+                    const data = error.response.data.message;
+                    if (data)
+                    {
+                        navigate('/login')
+                    }
+                    else{
+                        alert('Erro de requisicao.');
+                        navigate('/login') 
+                    }
+                })
+            }
+            else{
+                setIsLogado(false);
+            }
         }
-    },)
+
+        getNomeCliente();
+    }, [])
 
     useEffect(() => {
         async function getProducts()

@@ -1,6 +1,7 @@
 package br.com.server.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,14 +42,14 @@ public class ClienteMesaController {
 	}
 	
 	@PostMapping("/add")
-	public ClienteMesa add(@RequestBody ClienteMesa clienteMesa)
+	public void add(@RequestBody ClienteMesa clienteMesa)
 	{
-		return service.addClienteMesa(clienteMesa);
+		service.addClienteMesa(clienteMesa);
 	}
 	
-	@DeleteMapping("/delete/{id}")
-	public ClienteMesa delete(@RequestBody ClienteMesa clienteMesa)
+	@DeleteMapping("/delete/{idCliente}/{idMesa}")
+	public ClienteMesa delete(@PathVariable Long idCliente, @PathVariable Long idMesa)
 	{
-		return service.deleteClienteMesa(clienteMesa);
+		return service.deleteClienteMesa(idCliente, idMesa);
 	}
 }
