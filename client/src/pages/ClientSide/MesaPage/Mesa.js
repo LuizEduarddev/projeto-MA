@@ -10,6 +10,7 @@ export default function Mesa() {
     const isValidId = parseInt(id) >= 1 && parseInt(id) <= 9;
     const [integrantes, setIntegrantes] = useState([]);
     const [tokenUsuario, setTokenUsuario] = useState('');
+    const [tokenMesa, setTokenMesa] = useState('');
 
     useEffect(() => {
         if (!isValidId)
@@ -30,6 +31,7 @@ export default function Mesa() {
                     const idMesa = responseIdMesa.data.idMesa;
                     if (idMesa)
                     {
+                        setTokenMesa(idMesa);
                         api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + idMesa)
                         .then(responseIntegrantes => {
                             setIntegrantes(responseIntegrantes.data);
@@ -66,7 +68,7 @@ export default function Mesa() {
         }
 
         startMesa();
-    }, [])
+    }, [integrantes])
 
     async function logOffMesaREQUISITION()
     {
@@ -129,6 +131,7 @@ export default function Mesa() {
             })
         }
         else{
+            alert('Para esta funcao é necessário estar logado.');
             navigate('/login');
         }
     }
@@ -136,7 +139,8 @@ export default function Mesa() {
     async function logOffMesa()
     {
         const mesaToken = localStorage.getItem('mesaToken')
-        if (mesaToken)
+        const tokenUsuario = localStorage.getItem('clienteToken');
+        if (mesaToken && tokenUsuario)
         {
             api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + mesaToken)
             .then(responseUsuario => {
@@ -146,13 +150,27 @@ export default function Mesa() {
                     {
                         api.post('http://localhost:8080/api/pedido/check-out-cliente/' + mesaToken + "/" + tokenUsuario)
                         .then(responseCheckOut => {
-                            if (responseCheckOut)
+                            if (responseCheckOut.data)
                             {
                                 alert('Voce ainda tem pagamentos de pedidos pendentes. Pague todos para poder sair da mesa.');
                             }
                             else{
                                 alert('Saindo da mesa....');
-    
+                                api.delete('http://localhost:8080/api/mesa/cliente/delete/' + tokenUsuario + '/' + mesaToken)
+                                .then(responseCheckOut => {
+                                    localStorage.removeItem('mesaToken');
+                                    navigate('/home')
+                                })
+                                .catch(error => {
+                                    const message = error.response.data.message
+                                    if (message)
+                                    {
+                                        alert(message);
+                                    }
+                                    else{
+                                        alert('Erro em "mesa/cliente/delete/"'+ '\n' + 'Erro com a requisicao ou com a URL.' + "\n" + error);
+                                    }
+                                })
                             }
                         })
                         .catch(error => {

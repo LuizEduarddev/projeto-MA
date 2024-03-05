@@ -47,10 +47,10 @@ public class PedidoController
 		return service.getPedidoByIdCliente(id);
 	}
 	
-	@PutMapping("/alter/{id}")
-	public Pedido alter(@PathVariable("id") Long id,@RequestBody Pedido pedido)
+	@PutMapping("/alter/{id}/{operation}")
+	public Object alter(@PathVariable("id") Long id,@PathVariable("operation") int operation,@RequestBody Pedido pedido)
 	{
-		return service.alterPedido(id, pedido);
+		return service.alterPedido(id, pedido, operation);
 	}
 	
 	@PostMapping("/check-out-cliente/{mesaId}/{clienteId}")

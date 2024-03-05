@@ -77,7 +77,7 @@ export default function ItensPedidos()
                     "pedidoPago": true
                 }
 
-                api.put('http://localhost:8080/api/pedido/alter/' + id, pedido)
+                api.put('http://localhost:8080/api/pedido/alter/' + id + '/3', pedido)
                 .then(response => {
                     if (response && response.data) {
                         alert('pedido pago com sucesso!');
