@@ -41,6 +41,12 @@ public class ClienteMesaController {
 		return service.getClienteMesaByIdMesa(id);
 	}
 	
+	@PostMapping("/get-by-cliente-and-mesa-id/{idCliente}/{idMesa}")
+	public ClienteMesa getClienteMesaByClienteAndMesaId(@PathVariable Long idCliente, @PathVariable Long idMesa)
+	{
+		return service.getClienteMesaByIdClienteAndMesaId(idCliente, idMesa);
+	}
+	
 	@PostMapping("/add")
 	public void add(@RequestBody ClienteMesa clienteMesa)
 	{

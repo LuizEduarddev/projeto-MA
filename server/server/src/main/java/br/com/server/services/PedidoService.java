@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.server.entities.Cliente;
+import br.com.server.entities.ClienteMesa;
 import br.com.server.entities.Mesa;
 import br.com.server.entities.Pedido;
 import br.com.server.exceptions.ClienteException;
+import br.com.server.exceptions.ClienteMesaException;
 import br.com.server.exceptions.MesaException;
 import br.com.server.exceptions.PedidoException;
+import br.com.server.repositorys.ClienteMesaRepository;
 import br.com.server.repositorys.ClienteRepository;
 import br.com.server.repositorys.ItensPedidoRepository;
 import br.com.server.repositorys.MesaRepository;
@@ -32,6 +35,9 @@ public class PedidoService {
 
 	@Autowired
 	private MesaRepository mesaRepository;
+	
+	@Autowired
+	private ClienteMesaRepository clienteMesaRepository;
 
 	// Get mapping
 	public List<Pedido> getAllPedidos() {
@@ -50,9 +56,11 @@ public class PedidoService {
 		if (novoPedido == null) {
 			throw new PedidoException("O pedido nao pode ser nulo.");
 		} else {
+			updateMesa(novoPedido);
 			try {
+				
 				Pedido pedido = novoPedido;
-
+				
 				Calendar dataAtual = Calendar.getInstance();
 				boolean pronto = false;
 				int hora = dataAtual.get(Calendar.HOUR_OF_DAY);
@@ -72,15 +80,51 @@ public class PedidoService {
 
 				repository.saveAndFlush(pedido);
 				return pedido;
-			} catch (Exception e) {
+			} 
+			catch (Exception e) {
 				throw new PedidoException("Ocorreu um erro ao tentar criar o pedido.\n " + e);
 			}
 		}
 	}
 
+	private void updateMesa(Pedido novoPedido) {
+		if (novoPedido.getIdMesaPedido() != null && novoPedido.getIdClientePedido() != null)
+		{
+			Mesa mesa0 = mesaRepository.findById(novoPedido.getIdMesaPedido()) 
+					.orElseThrow(() ->
+					new MesaException("Mesa com id '" + novoPedido.getIdMesaPedido() + "' nao encontrada"));
+			
+			ClienteMesa clienteRelMesa = clienteMesaRepository.findByIdClienteAndIdMesa(novoPedido.getIdClientePedido(), novoPedido.getIdMesaPedido());
+			
+			if (clienteRelMesa != null)
+			{
+				double total = mesa0.getValorTotalMesa();
+				if (total <= 0)
+				{
+					mesa0.setValorTotalMesa(total);
+					mesaRepository.saveAndFlush(mesa0);
+					return;
+				}
+				else {					
+					total = total + novoPedido.getTotalPedido();
+					mesa0.setValorTotalMesa(total);
+					mesaRepository.saveAndFlush(mesa0);
+					return;
+				}
+			}
+			else {
+				throw new ClienteMesaException("Nenhum cliente cadastrado na mesa.");
+			}
+		}
+		else {
+			throw new PedidoException("O campo 'idMesa' ou 'idCliente' nao pode ser nulo");
+		}
+		
+	}
+
 	// PostMapping
-	public Pedido getPedidoByMesaId(Long id) {
-		Pedido pedido0 = repository.findByIdMesaPedido(id);
+	public List<Pedido> getPedidoByMesaId(Long id) {
+		List<Pedido> pedido0 = repository.findByIdMesaPedido(id);
 		if (pedido0 == null) {
 			throw new PedidoException("Nenhum pedido registrado na mesa '" + id + "'");
 		} else {

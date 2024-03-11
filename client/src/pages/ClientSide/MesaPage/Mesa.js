@@ -11,6 +11,7 @@ export default function Mesa() {
     const [integrantes, setIntegrantes] = useState([]);
     const [tokenUsuario, setTokenUsuario] = useState('');
     const [tokenMesa, setTokenMesa] = useState('');
+    const [pedidosCliente, setPedidosCliente] = useState([]);
 
     useEffect(() => {
         if (!isValidId)
@@ -19,6 +20,61 @@ export default function Mesa() {
         }
     }, [])
 
+    async function getResponseMesa(clienteToken)
+    {
+        api.post('http://localhost:8080/api/mesa/cliente/get-by-cliente-id/' + clienteToken)
+        .then(responseIdMesa => {
+            const idMesa = responseIdMesa.data.idMesa;
+            if (idMesa)
+            {
+                setTokenMesa(idMesa);
+                api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + idMesa)
+                .then(responseIntegrantes => {
+                    setIntegrantes(responseIntegrantes.data);
+                })
+                .catch(error => {getErrorMessage(error)})
+            }   
+            else{
+                alert('Um erro ocorreu ao tentar buscar a mesa do cliente.');
+            }
+        })
+        .catch(error => {getErrorMessage(error)})
+    }
+
+    function getErrorMessage(error)
+    {
+        const message = error.response.data.message;
+        if (message)
+        {
+            alert(message);
+        }
+        else{
+            alert('ERRO DE REQUISICAO OU/DE URL.');
+        }
+    }
+
+    async function getPedidosByMesa(clienteToken)
+    {
+        api.post('http://localhost:8080/api/mesa/cliente/get-by-cliente-id/' + clienteToken)
+        .then(responseIdMesa => {
+            const idMesa = responseIdMesa.data.idMesa;
+            if (idMesa)
+            {
+                setTokenMesa(idMesa);    
+                api.post('http://localhost:8080/api/pedido/get-by-mesa-id/' + idMesa)
+                .then(async responsePedidos => {
+                    setPedidosCliente(responsePedidos.data);
+                    console.log(responsePedidos.data)
+                })  
+                .catch(erro => {getErrorMessage(erro)})                  
+            }   
+            else{
+                alert('Um erro ocorreu ao tentar buscar a mesa do cliente.');
+            }
+        })
+        .catch(error => {getErrorMessage(error)})
+    }
+
     useEffect(() => {
         async function startMesa()
         {
@@ -26,41 +82,8 @@ export default function Mesa() {
             if (clienteToken)
             {
                 setTokenUsuario(clienteToken);
-                api.post('http://localhost:8080/api/mesa/cliente/get-by-cliente-id/' + clienteToken)
-                .then(responseIdMesa => {
-                    const idMesa = responseIdMesa.data.idMesa;
-                    if (idMesa)
-                    {
-                        setTokenMesa(idMesa);
-                        api.post('http://localhost:8080/api/mesa/cliente/get-clientes-by-mesa-id/' + idMesa)
-                        .then(responseIntegrantes => {
-                            setIntegrantes(responseIntegrantes.data);
-                        })
-                        .catch(error => {
-                            const message = error.response.data.message;
-                            if (message)
-                            {
-                                alert(message);
-                            }
-                            else{
-                                alert('Houve um erro ao tentar requisitar os integrantes da mesa');
-                            }
-                        })
-                    }   
-                    else{
-                        alert('Um erro ocorreu ao tentar buscar a mesa do cliente.');
-                    }
-                })
-                .catch(error => {
-                    const message = error.response.data.message;
-                    if (message)
-                    {
-                        alert(message);
-                    }
-                    else{
-                        alert('Houve um erro ao tentar requisitar a mesa do cliente');
-                    }
-                })
+                getResponseMesa(clienteToken);
+                getPedidosByMesa(clienteToken);
             }
             else{
                 navigate('/login');
@@ -69,6 +92,11 @@ export default function Mesa() {
 
         startMesa();
     }, [integrantes])
+
+    function toItensPedidos(id)
+    {
+        navigate('/cliente/pedidos/itens/' + id);
+    }
 
     async function logOffMesaREQUISITION()
     {
@@ -95,40 +123,13 @@ export default function Mesa() {
         
                                 }
                             })
-                            .catch(error => {
-                                const message = error.response.data.message
-                                if (message)
-                                {
-                                    alert(message);
-                                }
-                                else{
-                                    alert('Erro em "/check-out-cliente/"'+ '\n' + 'Erro com a requisicao ou com a URL.' + "\n" + error);
-                                }
-                            })
+                            .catch(error => {getErrorMessage(error)})
                         }
                     })
                 })
-                .catch(error => {
-                    const message = error.response.data.message
-                    if (message)
-                    {
-                        alert(message);
-                    }
-                    else{
-                        alert('Erro em "/get-clientes-by-mesa-id/"' + '\n' + 'Erro com a requisicao ou com a URL.' + "\n" + error);
-                    }
-                })
+                .catch(error => {getErrorMessage(error)})
             })
-            .catch(error => {
-                const message = error.response.data.message;
-                if (message)
-                {
-                    alert(message);
-                }
-                else{
-                    alert('Houve um erro ao tentar requisitar a mesa do cliente');
-                }
-            })
+            .catch(error => {getErrorMessage(error)})
         }
         else{
             alert('Para esta funcao é necessário estar logado.');
@@ -161,45 +162,27 @@ export default function Mesa() {
                                     localStorage.removeItem('mesaToken');
                                     navigate('/home')
                                 })
-                                .catch(error => {
-                                    const message = error.response.data.message
-                                    if (message)
-                                    {
-                                        alert(message);
-                                    }
-                                    else{
-                                        alert('Erro em "mesa/cliente/delete/"'+ '\n' + 'Erro com a requisicao ou com a URL.' + "\n" + error);
-                                    }
-                                })
+                                .catch(error => {getErrorMessage(error)})
                             }
                         })
-                        .catch(error => {
-                            const message = error.response.data.message
-                            if (message)
-                            {
-                                alert(message);
-                            }
-                            else{
-                                alert('Erro em "/check-out-cliente/"'+ '\n' + 'Erro com a requisicao ou com a URL.' + "\n" + error);
-                            }
-                        })
+                        .catch(error => {getErrorMessage(error)})
                     }
                 })
             })
-            .catch(error => {
-                const message = error.response.data.message
-                if (message)
-                {
-                    alert(message);
-                }
-                else{
-                    alert('Erro em "/get-clientes-by-mesa-id/"' + '\n' + 'Erro com a requisicao ou com a URL.' + "\n" + error);
-                }
-            })
+            .catch(error => {getErrorMessage(error)})
         } 
         else{
             logOffMesaREQUISITION();
         }
+    }
+
+    async function getUserName(idCliente)
+    {
+        api.post('http://localhost:8080/api/cliente/get-by-id/' + idCliente)
+        .then(response => {
+            return response.data.nomeCliente;
+        })
+        .catch(error => {getErrorMessage(error)})
     }
 
     return (
@@ -208,7 +191,7 @@ export default function Mesa() {
                 <h3>
                     <Link to = "/home">
                         <Home/>
-                        | Ir para a página inicial
+                        | Ir para a página inicial SR LUIZ QUE TAL COMECAR DO ZERO ?
                     </Link>
                 </h3>
             </div>
@@ -237,18 +220,41 @@ export default function Mesa() {
                 </ul>
             </div>    
             <hr></hr>
-
             <div>
                 <h1>Pedidos da mesa</h1>
                 <ul>
-
+                    {pedidosCliente.map(pedido => (
+                        <button onClick={() => toItensPedidos(pedido.idPedido)}>
+                        <li key={pedido.idPedido}>
+                                <h3>Cliente: <strong>{getUserName(pedido.idClientePedido)}</strong></h3>
+                                <h3>Mesa {pedido.idMesaPedido}</h3>
+                                <h3>
+                                    {pedido.pedidoPronto ? (
+                                        <>
+                                            <h3>Status do pedido: <strong>pronto!</strong></h3>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <h3>Status do pedido: <strong>em andamento.</strong></h3>
+                                        </>
+                                    )}
+                                </h3>
+                                <h3>Total do pedido R$<strong>{pedido.totalPedido}</strong></h3>
+                                <h3>
+                                    {pedido.pedidoPago ? (
+                                        <>
+                                        O pedido foi finalizado e pago.
+                                        </>
+                                    ) : (
+                                        <>
+                                        O pedido ainda não foi pago e está em aberto.
+                                        </>
+                                    )}
+                                </h3>
+                            </li>
+                        </button>
+                    ))}
                 </ul>
-            </div>
-
-            <hr></hr>
-            
-            <div>
-                <h1>Total da mesa</h1>
             </div>
         </div>
     );

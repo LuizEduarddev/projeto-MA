@@ -36,7 +36,7 @@ public class PedidoController
 	}
 	
 	@PostMapping("/get-by-mesa-id/{id}")
-	public Pedido getByMesaId(@PathVariable Long id)
+	public List<Pedido> getByMesaId(@PathVariable Long id)
 	{
 		return service.getPedidoByMesaId(id);
 	}

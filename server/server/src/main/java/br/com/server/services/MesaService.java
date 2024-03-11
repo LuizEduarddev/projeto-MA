@@ -61,14 +61,11 @@ public class MesaService
 	        Class<?> mesaClass = Mesa.class;
 	        Field[] fields = mesaClass.getDeclaredFields();
 
-	        for (Field field : fields) {
-	        	if (!field.equals("idMesa"))
-	        	{	        		
-	        		field.setAccessible(true);
-	        		Object value = field.get(novaMesa);
-	        		if (value != null) {
-	        			field.set(mesa0, value);
-	        		}
+	        for (Field field : fields) {   		
+        		field.setAccessible(true);
+        		Object value = field.get(novaMesa);
+        		if (value != null) {
+        			field.set(mesa0, value);	
 	        	}
 	        }
 

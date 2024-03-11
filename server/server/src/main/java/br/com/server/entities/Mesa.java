@@ -21,21 +21,21 @@ public class Mesa {
 	private boolean mesaEmUso;
 
 	@Column(name = "valor_total_mesa", unique = false, nullable = false)
-	private float valorTotalMesa;
+	private double valorTotalMesa;
 
 	public Mesa() {
 	}
 
-	public Mesa(boolean mesaEmUso, float valorTotalMesa) {
+	public Mesa(boolean mesaEmUso, double valorTotalMesa) {
 		this.mesaEmUso = mesaEmUso;
 		this.valorTotalMesa = valorTotalMesa;
 	}
 
-	public float getValorTotalMesa() {
+	public double getValorTotalMesa() {
 		return valorTotalMesa;
 	}
 
-	public void setValorTotalMesa(float valorTotalMesa) {
+	public void setValorTotalMesa(double valorTotalMesa) {
 		this.valorTotalMesa = valorTotalMesa;
 	}
 

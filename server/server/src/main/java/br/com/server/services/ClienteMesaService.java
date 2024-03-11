@@ -48,6 +48,19 @@ public class ClienteMesaService {
 	}
 	
 	//PostMapping
+		public ClienteMesa getClienteMesaByIdClienteAndMesaId(Long idCliente, Long idMesa)
+		{
+			ClienteMesa cliente0 = repository.findByIdClienteAndIdMesa(idCliente, idMesa);
+			if (cliente0 == null)
+			{
+				throw new ClienteMesaException("Nenhum cliente cadastrado nesta mesa");
+			}
+			else {
+				return cliente0;
+			}		
+		}
+	
+	//PostMapping
 	public List<ClienteShowMesaDTO> getClienteMesaByIdMesa(Long id)
 	{
 		List<ClienteMesa> clienteMesa0 = repository.findByIdMesa(id);
